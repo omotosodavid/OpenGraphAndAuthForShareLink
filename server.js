@@ -8,7 +8,10 @@ const SuperTokens = require("supertokens-node");
 const Session = require("supertokens-node/recipe/session");
 const ThirdParty = require("supertokens-node/recipe/thirdparty");
 const EmailPassword = require("supertokens-node/recipe/emailpassword");
-const { errorHandler, middleware } = require("supertokens-node/framework/express");
+const {
+  errorHandler,
+  middleware,
+} = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
 const dotenv = require("dotenv");
 
@@ -115,7 +118,11 @@ app.get("/scrape", async (req, res, next) => {
     // Intercept and block unnecessary requests
     await page.setRequestInterception(true);
     page.on("request", (request) => {
-      if (["image", "stylesheet", "font", "media", "scripts"].includes(request.resourceType())) {
+      if (
+        ["image", "stylesheet", "font", "media", "scripts"].includes(
+          request.resourceType()
+        )
+      ) {
         request.abort();
       } else {
         request.continue();
@@ -123,15 +130,18 @@ app.get("/scrape", async (req, res, next) => {
     });
 
     // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
 
     // Get the page content
     const html = await page.content();
     const $ = cheerio.load(html);
 
     // Scrape title and icon
-    const title = $("title").text() || $('meta[property="og:title"]').attr("content");
-    const icon = $('link[rel="icon"]').attr("href") || $('meta[property="og:image"]').attr("content");
+    const title =
+      $("title").text() || $('meta[property="og:title"]').attr("content");
+    const icon =
+      $('link[rel="icon"]').attr("href") ||
+      $('meta[property="og:image"]').attr("content");
 
     // Send response
     res.json({ title, icon, url });
@@ -152,7 +162,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server on port 4000
-const PORT =4000;
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
