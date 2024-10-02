@@ -4,6 +4,7 @@
   "description": "Authentication for sharelink web app",
   "main": "api-server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "omotosodavid",

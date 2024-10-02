@@ -1,4 +1,3 @@
-// Combined Backend File
 const express = require("express");
 const cors = require("cors");
 const cheerio = require("cheerio");
@@ -14,8 +13,6 @@ const {
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
 const dotenv = require("dotenv");
-
-// Load environment variables (optional)
 dotenv.config();
 
 // Initialize SuperTokens
@@ -162,7 +159,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server on port 4000
-const PORT = 4000;
+const PORT = process.env.PORT|| 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
