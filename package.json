@@ -1,10 +1,10 @@
 {
-  "name": "authsharelink",
+  "name": "opengraphandauthforsharelink",
   "version": "1.0.0",
   "description": "Authentication for sharelink web app",
-  "main": "api-server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node api/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "omotosodavid",
