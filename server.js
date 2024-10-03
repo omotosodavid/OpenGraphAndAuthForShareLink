@@ -24,7 +24,7 @@ SuperTokens.init({
   appInfo: {
     apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     appName: "sharelink",
-    websiteDomain: "http://localhost:3000",
+    websiteDomain: "http://localhost:3000", 
   },
   recipeList: [
     EmailPassword.init(),
@@ -68,10 +68,17 @@ SuperTokens.init({
 // Express App Setup
 const app = express();
 
-// Enable CORS
+// Enable CORS for all routes
+const allowedOrigins = ['http://localhost:3000', 'https://example.com'];
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     allowedHeaders: ['content-type', ...SuperTokens.getAllCORSHeaders()],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -96,7 +103,6 @@ const puppeteerOptions = {
   ],
 };
 
-// Scrape route with enhanced error handling
 app.get("/scrape", async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -148,6 +154,7 @@ app.get("/scrape", async (req, res) => {
     res.json({ title, icon, url });
   } catch (error) {
     console.error("Scraping error:", error);
+    res.status(500).send({ error: "Internal Server Error" });
   } finally {
     if (browser) await browser.close();
   }
