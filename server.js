@@ -22,7 +22,7 @@ SuperTokens.init({
     apiKey: process.env.SUPERTOKENS_API_KEY,
   },
   appInfo: {
-    apiDomain: "http://localhost:4000",
+    apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     appName: "sharelink",
     websiteDomain: "http://localhost:3000",
   },
