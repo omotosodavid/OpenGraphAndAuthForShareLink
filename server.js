@@ -72,9 +72,9 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:3000",
-    allowedHeaders: ["content-type", ...SuperTokens.getAllCORSHeaders()],
-    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    allowedHeaders: ['content-type', ...SuperTokens.getAllCORSHeaders()],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   })
 );
 
@@ -157,13 +157,13 @@ app.get("/scrape", async (req, res) => {
 app.use(errorHandler());
 
 // Catch-all error handler
-app.use((err, req, res, next) => {
+app.use((err,res) => {
   console.error("Server error:", err.stack);
   res.status(500).send(`Internal Server Error: ${err.message}`);
 });
 
 // Start the server on port 4000
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
