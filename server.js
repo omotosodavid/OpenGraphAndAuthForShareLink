@@ -68,15 +68,17 @@ SuperTokens.init({
 // Express App Setup
 const app = express();
 
-// Enable CORS
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-    allowedHeaders: ['content-type', ...SuperTokens.getAllCORSHeaders()],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  })
-);
+// Enable CORS with detailed configuration
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") {
+    return res.status(204).send(); 
+  }
+  next();
+});
 
 // SuperTokens middleware
 app.use(middleware());
@@ -148,6 +150,7 @@ app.get("/scrape", async (req, res) => {
     res.json({ title, icon, url });
   } catch (error) {
     console.error("Scraping error:", error);
+    res.status(500).send({ error: "Failed to scrape the URL." });
   } finally {
     if (browser) await browser.close();
   }
@@ -157,7 +160,7 @@ app.get("/scrape", async (req, res) => {
 app.use(errorHandler());
 
 // Catch-all error handler
-app.use((err,res) => {
+app.use((err, res) => {
   console.error("Server error:", err.stack);
   res.status(500).send(`Internal Server Error: ${err.message}`);
 });
