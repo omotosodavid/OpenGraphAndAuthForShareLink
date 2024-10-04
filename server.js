@@ -162,12 +162,6 @@ app.use((err, res) => {
   res.status(500).send(`Internal Server Error: ${err.message}`);
 });
 
-// app.get("/auth/public/dashboard/api/users", (req, res) => {
-//   const { limit } = req.query;
-//   // Handle the query param 'limit' here
-//   res.send({ message: `Limit is set to ${limit}` });
-// });
-
 
 // Start the server on port 4000
 const PORT = 4000;
