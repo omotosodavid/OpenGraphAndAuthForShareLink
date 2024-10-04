@@ -10,7 +10,7 @@
     ],
     "routes": [
       {
-        "src": "/scrape/(.*)",
+        "src": "/scrape",
         "dest": "/server.js"
       },
       {
