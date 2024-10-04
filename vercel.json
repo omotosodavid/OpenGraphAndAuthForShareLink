@@ -20,6 +20,10 @@
       "dest": "/server.js"
     },
     {
+      "src": "/auth/session/refresh",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/"
     }
