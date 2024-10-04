@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/auth/public/dashboard/api/users?limit=10",
+      "dest": "/server.js"
+    },
+    {
       "src": "/scrape",
       "dest": "/server.js"
     },
@@ -29,10 +33,6 @@
     },
     {
       "src": "/auth/dashboard/api/userroles/roles",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/public/dashboard/api/users?limit=10",
       "dest": "/server.js"
     },
     {
