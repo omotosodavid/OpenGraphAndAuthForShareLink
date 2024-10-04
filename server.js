@@ -112,6 +112,10 @@ app.get("/scrape", async (req, res) => {
   let browser;
 
   try {
+    // Send initial response quickly to avoid timeout
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.write(JSON.stringify({ status: "Processing request..." }));
+
     // Launch Puppeteer with timeout
     browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
@@ -144,14 +148,18 @@ app.get("/scrape", async (req, res) => {
       $('link[rel="icon"]').attr("href") ||
       $('meta[property="og:image"]').attr("content");
 
-    // Send response
-    res.json({ title, icon, url });
+    // Send the final results
+    res.write(JSON.stringify({ title, icon, url }));
+    res.end();
   } catch (error) {
     console.error("Scraping error:", error);
+    res.status(500).write(JSON.stringify({ error: "Scraping failed" }));
+    res.end();
   } finally {
     if (browser) await browser.close();
   }
 });
+
 
 // General SuperTokens error handler
 app.use(errorHandler());
