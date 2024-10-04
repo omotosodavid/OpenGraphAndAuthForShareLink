@@ -1,26 +1,23 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "./server.js",
-        "use": "@vercel/node","config": {
-        "maxDuration": 30 
-      }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/scrape",
-        "dest": "/server.js"
-      },
-      {
-        "src": "/auth/(.*)",
-        "dest": "/server.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "./server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/scrape",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
