@@ -8,8 +8,9 @@
   ],
   "routes": [
     {
-      "src": "/scrape(.*)",
-      "dest": "/server.js"
+      "src": "/scrape",
+      "dest": "/server.js",
+      "maxDuration": 60
     },
     {
       "src": "/auth/(.*)",
