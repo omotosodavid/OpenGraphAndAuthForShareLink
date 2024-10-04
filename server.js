@@ -112,10 +112,6 @@ app.get("/scrape", async (req, res) => {
   let browser;
 
   try {
-    // Send initial response quickly to avoid timeout
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.write(JSON.stringify({ status: "Processing request..." }));
-
     // Launch Puppeteer with timeout
     browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
@@ -123,10 +119,21 @@ app.get("/scrape", async (req, res) => {
     // Intercept and block unnecessary requests
     await page.setRequestInterception(true);
     page.on("request", (request) => {
+      const resourceType = request.resourceType();
+      const blockedTypes = ["image", "stylesheet", "font", "media", "scripts"];
+      const blockedUrls = [
+        "ads",
+        "doubleclick",
+        "googlesyndication",
+        "adservice",
+        "adclick",
+        "adnxs",
+        "banner",
+      ];
+
       if (
-        ["image", "stylesheet", "font", "media", "scripts"].includes(
-          request.resourceType()
-        )
+        blockedTypes.includes(resourceType) ||
+        blockedUrls.some((url) => request.url().includes(url))
       ) {
         request.abort();
       } else {
@@ -135,7 +142,7 @@ app.get("/scrape", async (req, res) => {
     });
 
     // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+    await page.goto(url, { waitUntil: "networkidle0"});
 
     // Get the page content
     const html = await page.content();
@@ -148,13 +155,10 @@ app.get("/scrape", async (req, res) => {
       $('link[rel="icon"]').attr("href") ||
       $('meta[property="og:image"]').attr("content");
 
-    // Send the final results
-    res.write(JSON.stringify({ title, icon, url }));
-    // res.end();
+    // Send response
+    res.json({ title, icon, url });
   } catch (error) {
-    console.error("Scraping error:", error);
-    res.status(500).write(JSON.stringify({ error: "Scraping failed" }));
-    // res.end();
+    console.error("Scraping error:", error);return res.status(500).json({ error: "Failed to scrape the URL." });
   } finally {
     if (browser) await browser.close();
   }
