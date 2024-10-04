@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/scrape",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/"
     }
