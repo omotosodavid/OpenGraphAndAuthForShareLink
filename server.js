@@ -113,7 +113,7 @@ app.get("/scrape", async (req, res) => {
 
   try {
     // Send initial response quickly to avoid timeout
-    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.writeHead(200, { "Content-Type": "application/json" });
     res.write(JSON.stringify({ status: "Processing request..." }));
 
     // Launch Puppeteer with timeout
@@ -150,16 +150,15 @@ app.get("/scrape", async (req, res) => {
 
     // Send the final results
     res.write(JSON.stringify({ title, icon, url }));
-    res.end();
+    // res.end();
   } catch (error) {
     console.error("Scraping error:", error);
     res.status(500).write(JSON.stringify({ error: "Scraping failed" }));
-    res.end();
+    // res.end();
   } finally {
     if (browser) await browser.close();
   }
 });
-
 
 // General SuperTokens error handler
 app.use(errorHandler());
@@ -169,7 +168,6 @@ app.use((err, res) => {
   console.error("Server error:", err.stack);
   res.status(500).send(`Internal Server Error: ${err.message}`);
 });
-
 
 // Start the server on port 4000
 const PORT = 4000;
