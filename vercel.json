@@ -6,11 +6,15 @@
       "use": "@vercel/node"
     }
   ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 60 
+    }
+  },
   "routes": [
     {
       "src": "/scrape",
-      "dest": "/server.js",
-      "maxDuration": 60
+      "dest": "/server.js"
     },
     {
       "src": "/auth/(.*)",
