@@ -3,15 +3,13 @@
   "builds": [
     {
       "src": "./server.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 60
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/scrape",
+      "methods": ["GET"],
       "dest": "/server.js"
     },
     {
@@ -20,7 +18,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "/server.js"
     }
   ]
 }
