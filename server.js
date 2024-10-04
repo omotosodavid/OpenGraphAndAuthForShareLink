@@ -142,7 +142,7 @@ app.get("/scrape", async (req, res) => {
     });
 
     // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle0",timeout:30000});
+    await page.goto(url, { waitUntil: "networkidle0",timeout:60000});
 
     // Get the page content
     const html = await page.content();
