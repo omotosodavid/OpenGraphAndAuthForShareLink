@@ -12,7 +12,19 @@
       "dest": "/server.js"
     },
     {
-      "src": "/auth/*",
+      "src": "auth/authorisationurl?thirdPartyId=google&redirectURIOnProviderDashboard=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback%2Fgoogle",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/auth/dashboard",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/auth/signout",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/auth/session/refresh",
       "dest": "/server.js"
     },
     {
