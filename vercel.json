@@ -12,6 +12,10 @@
       "dest": "/server.js"
     },
     {
+      "src": "/auth/dashboard",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/"
     }
