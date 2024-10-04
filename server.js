@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cheerio = require("cheerio");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const validUrl = require("valid-url");
 const SuperTokens = require("supertokens-node");
 const Session = require("supertokens-node/recipe/session");
@@ -86,7 +86,8 @@ app.use(express.json());
 
 // Puppeteer launch options
 const puppeteerOptions = {
-  headless: true,
+  headless: "new",
+  executablePath: `/usr/bin/google-chrome`,
   args: [
     "--no-sandbox",
     "--disable-setuid-sandbox",
@@ -131,7 +132,7 @@ app.get("/scrape", async (req, res) => {
     });
 
     // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle0",timeout:60000});
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
 
     // Get the page content
     const html = await page.content();
