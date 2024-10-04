@@ -16,6 +16,10 @@
       "dest": "/server.js"
     },
     {
+      "src": "/auth/dashboard/api/search/tags",
+      "dest": "/server.js"
+    },
+    {
       "src": "/auth/dashboard",
       "dest": "/server.js"
     },
