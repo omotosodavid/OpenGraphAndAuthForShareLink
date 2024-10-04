@@ -119,21 +119,10 @@ app.get("/scrape", async (req, res) => {
     // Intercept and block unnecessary requests
     await page.setRequestInterception(true);
     page.on("request", (request) => {
-      const resourceType = request.resourceType();
-      const blockedTypes = ["image", "stylesheet", "font", "media", "scripts"];
-      const blockedUrls = [
-        "ads",
-        "doubleclick",
-        "googlesyndication",
-        "adservice",
-        "adclick",
-        "adnxs",
-        "banner",
-      ];
-
       if (
-        blockedTypes.includes(resourceType) ||
-        blockedUrls.some((url) => request.url().includes(url))
+        ["image", "stylesheet", "font", "media", "scripts"].includes(
+          request.resourceType()
+        )
       ) {
         request.abort();
       } else {
