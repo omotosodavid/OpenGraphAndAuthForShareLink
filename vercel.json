@@ -12,7 +12,7 @@
       "dest": "/server.js"
     },
     {
-      "src": "auth/dashboard/api/signin",
+      "src": "/auth/dashboard/api/signin",
       "dest": "/server.js"
     },
     {
