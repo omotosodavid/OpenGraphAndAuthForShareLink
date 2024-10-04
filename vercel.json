@@ -12,15 +12,7 @@
       "dest": "/server.js"
     },
     {
-      "src": "/auth/dashboard",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/signout",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/session/refresh",
+      "src": "/auth/*",
       "dest": "/server.js"
     },
     {
