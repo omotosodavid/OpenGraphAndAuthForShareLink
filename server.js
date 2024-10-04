@@ -142,7 +142,7 @@ app.get("/scrape", async (req, res) => {
     });
 
     // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle0"});
+    await page.goto(url, { waitUntil: "networkidle0",timeout:30000});
 
     // Get the page content
     const html = await page.content();
@@ -158,7 +158,7 @@ app.get("/scrape", async (req, res) => {
     // Send response
     res.json({ title, icon, url });
   } catch (error) {
-    console.error("Scraping error:", error);return res.status(500).json({ error: "Failed to scrape the URL." });
+    console.error("Scraping error:", error);
   } finally {
     if (browser) await browser.close();
   }
