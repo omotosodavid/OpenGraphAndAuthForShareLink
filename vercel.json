@@ -1,59 +1,28 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "./server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/auth/public/dashboard/api/users?limit=10",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/scrape",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard/api/signin",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard/api/tenants",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/public/dashboard/api/users/count",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard/api/analytics",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard/api/userroles/roles",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard/api/search/tags",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/dashboard",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/signout",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/auth/session/refresh",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ]
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "./server.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/auth/dashboard/api/(.*)",
+        "dest": "/server.js"
+      },
+      {
+        "src": "/scrape",
+        "dest": "/server.js"
+      },
+      {
+        "src": "/auth/(.*)",
+        "dest": "/server.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
+    ]
+  }
+  
