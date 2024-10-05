@@ -118,7 +118,7 @@ app.get("/scrape", async (req, res) => {
 
   try {
     // Launch Puppeteer with timeout
-    browser = await puppeteer.launch(puppeteerOptions);
+    browser = await chrome.puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
 
     // Intercept and block unnecessary requests
