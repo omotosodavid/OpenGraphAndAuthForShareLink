@@ -1,8 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const cheerio = require("cheerio");
-const puppeteer = require("puppeteer-core");
 const validUrl = require("valid-url");
 const SuperTokens = require("supertokens-node");
 const Session = require("supertokens-node/recipe/session");
@@ -13,7 +11,7 @@ const {
   middleware,
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
-const chrome = require("chrome-aws-lambda");
+const { ogImage } = require("@vercel/og"); 
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -85,7 +83,7 @@ app.use(middleware());
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Scrape route with enhanced error handling
+// Scrape route using @vercel/og for Open Graph metadata
 app.get("/scrape", async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -98,55 +96,15 @@ app.get("/scrape", async (req, res) => {
     return res.status(400).json({ error: "Invalid URL" });
   }
 
-  let browser;
-
   try {
-    // Puppeteer launch options
-    const puppeteerOptions = {
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
-   };
+    // Use @vercel/og to get Open Graph data
+    const { title, description, image } = await ogImage(url);
 
-    // Launch Puppeteer with timeout
-    browser = await puppeteer.launch(puppeteerOptions);
-    const page = await browser.newPage();
-
-    // Intercept and block unnecessary requests
-    await page.setRequestInterception(true);
-    page.on("request", (request) => {
-      if (
-        ["image", "stylesheet", "font", "media", "scripts"].includes(
-          request.resourceType()
-        )
-      ) {
-        request.abort();
-      } else {
-        request.continue();
-      }
-    });
-
-    // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
-
-    // Get the page content
-    const html = await page.content();
-    const $ = cheerio.load(html);
-
-    // Scrape title and icon
-    const title =
-      $("title").text() || $('meta[property="og:title"]').attr("content");
-    const icon =
-      $('link[rel="icon"]').attr("href") ||
-      $('meta[property="og:image"]').attr("content");
-
-    // Send response
-    res.json({ title, icon, url });
+    // Send the Open Graph metadata as a response
+    res.json({ title, description, icon: image, url });
   } catch (error) {
     console.error("Scraping error:", error);
-    res.status(500).json({ error: "Scraping failed" }); // Send error response
-  } finally {
-    if (browser) await browser.close();
+    res.status(500).json({ error: "Scraping failed" });
   }
 });
 
