@@ -14,7 +14,6 @@ const {
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
 const chromium = require("@sparticuz/chromium");
-const Chromium = require("@sparticuz/chromium");
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -108,10 +107,9 @@ app.get("/scrape", async (req, res) => {
       executablePath: await chromium.executablePath(),
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
-      defaultViewport: Chromium.defaultViewport,
+      defaultViewport: chromium.defaultViewport,
     };
-
-    // Launch Puppeteer with timeout
+    
     browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
 
@@ -129,8 +127,7 @@ app.get("/scrape", async (req, res) => {
       }
     });
 
-    // Navigate to the URL with a strict timeout
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     // Get the page content
     const html = await page.content();
@@ -147,7 +144,7 @@ app.get("/scrape", async (req, res) => {
     res.json({ title, icon, url });
   } catch (error) {
     console.error("Scraping error:", error);
-    res.status(500).json({ error: "Scraping failed" }); // Send error response
+    res.status(500).json({ error: "Scraping failed" });
   } finally {
     if (browser) await browser.close();
   }
