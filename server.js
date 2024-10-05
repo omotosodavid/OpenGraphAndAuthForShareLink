@@ -13,7 +13,7 @@ const {
   middleware,
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
-const chrome = require('chrome-aws-lambda');
+const chrome = require("chrome-aws-lambda");
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -85,22 +85,6 @@ app.use(middleware());
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Puppeteer launch options
-const puppeteerOptions = {
-  defaultViewport: chrome.defaultViewport,
-  executablePath: await chrome.executablePath,
-  headless: chrome.headless,
-  ignoreHTTPSErrors: true,
-  args: [
-    ...chrome.args,
-    "--no-sandbox",
-    "--disable-setuid-sandbox",
-    "--disable-gpu",
-    "--disable-dev-shm-usage",
-    "--single-process",
-  ],
-};
-
 // Scrape route with enhanced error handling
 app.get("/scrape", async (req, res) => {
   if (req.method !== "GET") {
@@ -111,12 +95,28 @@ app.get("/scrape", async (req, res) => {
 
   // Validate the URL
   if (!validUrl.isWebUri(url)) {
-    return res.status(400).send({ error: "Invalid URL" });
+    return res.status(400).json({ error: "Invalid URL" });
   }
 
   let browser;
 
   try {
+    // Puppeteer launch options
+    const puppeteerOptions = {
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
+      ignoreHTTPSErrors: true,
+      args: [
+        ...chrome.args,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--single-process",
+      ],
+    };
+
     // Launch Puppeteer with timeout
     browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
@@ -153,6 +153,7 @@ app.get("/scrape", async (req, res) => {
     res.json({ title, icon, url });
   } catch (error) {
     console.error("Scraping error:", error);
+    res.status(500).json({ error: "Scraping failed" }); // Send error response
   } finally {
     if (browser) await browser.close();
   }
@@ -162,7 +163,7 @@ app.get("/scrape", async (req, res) => {
 app.use(errorHandler());
 
 // Catch-all error handler
-app.use((err, res) => {
+app.use((err, req, res, next) => {
   console.error("Server error:", err.stack);
   res.status(500).send(`Internal Server Error: ${err.message}`);
 });
