@@ -1,17 +1,16 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const validUrl = require("valid-url");
-const SuperTokens = require("supertokens-node");
-const Session = require("supertokens-node/recipe/session");
-const ThirdParty = require("supertokens-node/recipe/thirdparty");
-const EmailPassword = require("supertokens-node/recipe/emailpassword");
-const {
-  errorHandler,
-  middleware,
-} = require("supertokens-node/framework/express");
-const Dashboard = require("supertokens-node/recipe/dashboard");
-const { ogImage } = require("@vercel/og"); 
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import cors from "cors";
+import validUrl from "valid-url";
+import SuperTokens from "supertokens-node";
+import Session from "supertokens-node/recipe/session";
+import ThirdParty from "supertokens-node/recipe/thirdparty";
+import EmailPassword from "supertokens-node/recipe/emailpassword";
+import { errorHandler, middleware } from "supertokens-node/framework/express";
+import Dashboard from "supertokens-node/recipe/dashboard";
+import { ogImage } from "@vercel/og";
+
 
 // Initialize SuperTokens
 SuperTokens.init({
