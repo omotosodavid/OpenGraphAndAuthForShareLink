@@ -127,7 +127,7 @@ app.get("/scrape", async (req, res) => {
       }
     });
 
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
 
     // Get the page content
     const html = await page.content();
