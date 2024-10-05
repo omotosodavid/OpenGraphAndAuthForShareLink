@@ -13,6 +13,7 @@ const {
   middleware,
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
+const chrome = require('chrome-aws-lambda');
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -86,9 +87,12 @@ app.use(express.json());
 
 // Puppeteer launch options
 const puppeteerOptions = {
-  headless: "new",
-  executablePath: `/usr/bin/google-chrome`,
+  defaultViewport: chrome.defaultViewport,
+  executablePath: await chrome.executablePath,
+  headless: chrome.headless,
+  ignoreHTTPSErrors: true,
   args: [
+    ...chrome.args,
     "--no-sandbox",
     "--disable-setuid-sandbox",
     "--disable-gpu",
