@@ -103,19 +103,10 @@ app.get("/scrape", async (req, res) => {
   try {
     // Puppeteer launch options
     const puppeteerOptions = {
-      defaultViewport: chrome.defaultViewport,
+      args: chrome.args,
       executablePath: await chrome.executablePath,
       headless: chrome.headless,
-      ignoreHTTPSErrors: true,
-      args: [
-        ...chrome.args,
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-gpu",
-        "--disable-dev-shm-usage",
-        "--single-process",
-      ],
-    };
+   };
 
     // Launch Puppeteer with timeout
     browser = await puppeteer.launch(puppeteerOptions);

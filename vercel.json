@@ -9,7 +9,6 @@
   "routes": [
     {
       "src": "/scrape",
-      "methods": ["GET"], 
       "dest": "/server.js"
     },
     {
