@@ -1,16 +1,18 @@
-import dotenv from "dotenv";
-dotenv.config();
-import express from "express";
-import cors from "cors";
-import validUrl from "valid-url";
-import SuperTokens from "supertokens-node";
-import Session from "supertokens-node/recipe/session";
-import ThirdParty from "supertokens-node/recipe/thirdparty";
-import EmailPassword from "supertokens-node/recipe/emailpassword";
-import { errorHandler, middleware } from "supertokens-node/framework/express";
-import Dashboard from "supertokens-node/recipe/dashboard";
-import { ImageResponse } from "@vercel/og";
-
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const cheerio = require("cheerio");
+const puppeteer = require("puppeteer-core");
+const validUrl = require("valid-url");
+const SuperTokens = require("supertokens-node");
+const Session = require("supertokens-node/recipe/session");
+const ThirdParty = require("supertokens-node/recipe/thirdparty");
+const EmailPassword = require("supertokens-node/recipe/emailpassword");
+const {
+  errorHandler,
+  middleware,
+} = require("supertokens-node/framework/express");
+const chromium = require("@sparticuz/chromium"); // Change here
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -82,7 +84,7 @@ app.use(middleware());
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Scrape route using @vercel/og for Open Graph metadata
+// Scrape route with enhanced error handling
 app.get("/scrape", async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -95,15 +97,57 @@ app.get("/scrape", async (req, res) => {
     return res.status(400).json({ error: "Invalid URL" });
   }
 
-  try {
-    // Use @vercel/og to get Open Graph data
-    const { title, description, image } = new ImageResponse(url);
+  let browser;
 
-    // Send the Open Graph metadata as a response
-    res.json({ title, description, icon: image, url });
+  try {
+    // Puppeteer launch options using @sparticuz/chromium
+    const puppeteerOptions = {
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
+      defaultViewport: null,
+    };
+
+    // Launch Puppeteer with timeout
+    browser = await puppeteer.launch(puppeteerOptions);
+    const page = await browser.newPage();
+
+    // Intercept and block unnecessary requests
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "stylesheet", "font", "media", "scripts"].includes(
+          request.resourceType()
+        )
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
+    // Navigate to the URL with a strict timeout
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+
+    // Get the page content
+    const html = await page.content();
+    const $ = cheerio.load(html);
+
+    // Scrape title and icon
+    const title =
+      $("title").text() || $('meta[property="og:title"]').attr("content");
+    const icon =
+      $('link[rel="icon"]').attr("href") ||
+      $('meta[property="og:image"]').attr("content");
+
+    // Send response
+    res.json({ title, icon, url });
   } catch (error) {
     console.error("Scraping error:", error);
-    res.status(500).json({ error: "Scraping failed" });
+    res.status(500).json({ error: "Scraping failed" }); // Send error response
+  } finally {
+    if (browser) await browser.close();
   }
 });
 
