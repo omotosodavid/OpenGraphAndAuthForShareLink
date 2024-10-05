@@ -9,7 +9,7 @@ import ThirdParty from "supertokens-node/recipe/thirdparty";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import { errorHandler, middleware } from "supertokens-node/framework/express";
 import Dashboard from "supertokens-node/recipe/dashboard";
-import { ogImage } from "@vercel/og";
+import { ImageResponse } from "@vercel/og";
 
 
 // Initialize SuperTokens
@@ -97,7 +97,7 @@ app.get("/scrape", async (req, res) => {
 
   try {
     // Use @vercel/og to get Open Graph data
-    const { title, description, image } = await ogImage(url);
+    const { title, description, image } = await ImageResponse(url);
 
     // Send the Open Graph metadata as a response
     res.json({ title, description, icon: image, url });
