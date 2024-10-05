@@ -9,6 +9,9 @@
   },
   "author": "omotosodavid",
   "license": "ISC",
+  "engines": {
+    "node": "^14"
+  },
   "dependencies": {
     "cheerio": "^1.0.0",
     "chrome-aws-lambda": "^10.1.0",
