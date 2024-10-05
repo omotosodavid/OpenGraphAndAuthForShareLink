@@ -14,6 +14,7 @@ const {
 } = require("supertokens-node/framework/express");
 const Dashboard = require("supertokens-node/recipe/dashboard");
 const chromium = require("@sparticuz/chromium");
+const Chromium = require("@sparticuz/chromium");
 
 // Initialize SuperTokens
 SuperTokens.init({
@@ -104,10 +105,10 @@ app.get("/scrape", async (req, res) => {
     // Puppeteer launch options using @sparticuz/chromium
     const puppeteerOptions = {
       args: chromium.args,
-      executablePath: chromium.executablePath,
+      executablePath: chromium.executablePath(),
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
-      defaultViewport: null,
+      defaultViewport: Chromium.defaultViewport,
     };
 
     // Launch Puppeteer with timeout
