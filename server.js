@@ -105,7 +105,7 @@ app.get("/scrape", async (req, res) => {
     // Puppeteer launch options using @sparticuz/chromium
     const puppeteerOptions = {
       args: chromium.args,
-      executablePath: chromium.executablePath(),
+      executablePath: await chromium.executablePath(),
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
       defaultViewport: Chromium.defaultViewport,
