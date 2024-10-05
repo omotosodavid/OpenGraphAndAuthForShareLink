@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cheerio = require("cheerio");
-// const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer-core");
 const validUrl = require("valid-url");
 const SuperTokens = require("supertokens-node");
 const Session = require("supertokens-node/recipe/session");
@@ -118,7 +118,7 @@ app.get("/scrape", async (req, res) => {
 
   try {
     // Launch Puppeteer with timeout
-    browser = await chrome.puppeteer.launch(puppeteerOptions);
+    browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
 
     // Intercept and block unnecessary requests
