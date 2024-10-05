@@ -97,7 +97,7 @@ app.get("/scrape", async (req, res) => {
 
   try {
     // Use @vercel/og to get Open Graph data
-    const { title, description, image } = await ImageResponse(url);
+    const { title, description, image } = new ImageResponse(url);
 
     // Send the Open Graph metadata as a response
     res.json({ title, description, icon: image, url });
