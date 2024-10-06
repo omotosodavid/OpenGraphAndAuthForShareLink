@@ -25,7 +25,7 @@ SuperTokens.init({
   appInfo: {
     apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     appName: "sharelink",
-    websiteDomain: "http://localhost:3000",
+    websiteDomain: "https://sharelinks-one.vercel.app",
   },
   recipeList: [
     EmailPassword.init(),
@@ -72,7 +72,7 @@ const app = express();
 // Enable CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://sharelinks-one.vercel.app",
     credentials: true,
     allowedHeaders: ["content-type", ...SuperTokens.getAllCORSHeaders()],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
