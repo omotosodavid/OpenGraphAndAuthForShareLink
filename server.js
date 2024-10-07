@@ -43,21 +43,6 @@ SuperTokens.init({
               ],
             },
           },
-          {
-            config: {
-              thirdPartyId: "apple",
-              clients: [
-                {
-                  clientId: process.env.APPLE_CLIENT_ID,
-                  additionalConfig: {
-                    keyId: process.env.APPLE_KEY_ID,
-                    privateKey: process.env.APPLE_PRIVATE_KEY,
-                    teamId: process.env.APPLE_TEAM_ID,
-                  },
-                },
-              ],
-            },
-          },
         ],
       },
     }),
